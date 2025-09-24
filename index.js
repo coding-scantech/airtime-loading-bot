@@ -7,13 +7,8 @@ dotenv.config()
 
 // ------------------ CONFIG ------------------
 
-const {
-  MTEJA_URL,
-  MTEJA_APP_ID,
-  MTEJA_API_KEY,
-  TELEGRAM_BOT_TOKEN,
-  TELEGRAM_CHAT_ID,
-} = process.env
+const { MTEJA_URL, MTEJA_APP_ID, MTEJA_API_KEY, TELEGRAM_BOT_TOKEN } =
+  process.env
 
 // ------------------ UTILS ------------------
 

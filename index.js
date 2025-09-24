@@ -33,7 +33,7 @@ function formatPhoneNumber(raw) {
   return null
 }
 
-async function sendAirtime(phoneNumber) {
+async function sendAirtime(phoneNumber, sender) {
   try {
     const response = await axios.post(
       MTEJA_URL,
@@ -59,12 +59,12 @@ async function sendAirtime(phoneNumber) {
     const success = response?.data?.success
 
     if (success) {
-      await bot.sendMessage(TELEGRAM_CHAT_ID, "✅ Airtime loaded successfully")
+      await bot.sendMessage(sender, "✅ Airtime loaded successfully")
     } else {
-      await bot.sendMessage(TELEGRAM_CHAT_ID, `❌ ${response?.data?.reason}`)
+      await bot.sendMessage(sender, `❌ ${response?.data?.reason}`)
     }
   } catch (error) {
-    await bot.sendMessage(TELEGRAM_CHAT_ID, `❌ ${error.message}`)
+    await bot.sendMessage(sender, `❌ ${error.message}`)
   }
 }
 
@@ -80,7 +80,7 @@ console.log("🤖 Telegram bot started. Waiting for messages...")
 
 // Listen for messages
 bot.on("message", async (message) => {
-  const { text } = message
+  const { text, chat } = message
 
   // Check text  to see if it is a number
   const formattedNumber = formatPhoneNumber(text)
@@ -88,11 +88,11 @@ bot.on("message", async (message) => {
   if (!formattedNumber) {
     // Invalid format
     await bot.sendMessage(
-      TELEGRAM_CHAT_ID,
+      chat.id,
       "📱 Invalid format.Send a valid number like 0712345678 or +254712345678"
     )
   } else {
     // Load airtime , everything OK!
-    sendAirtime(formattedNumber)
+    sendAirtime(formattedNumber, chat.id)
   }
 })
